@@ -2,13 +2,25 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import cron from "node-cron"
 import connectDb from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js"
-import todoRoutes from "./routes/todoRoutes.js"
+import bookRoutes from "./routes/bookRoutes.js"
+import  cardRoutes from "./routes/cardRoutes.js"
+import departmentRoutes from "./routes/deparmentRoutes.js"
+import issueRoutes from "./routes/issueRoutes.js";
+import "./cron/remainder.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js"
+import myissuebook from "./routes/users/myissuebook.js"
 
 dotenv.config();
 
 const app = express();
+// cron.schedule("*/10 * * * * *", function() {
+//     console.log("running a task every 10 second");
+// });
+
+
 
 // Middleware
 app.use(cors());
@@ -26,11 +38,18 @@ app.get("/", (req, res) => {
 });
 
 // connect Route
-app.use("/auth",authRoutes)
-app.use("/todo" , todoRoutes)
+app.use("/api/auth",authRoutes)
+app.use("/api/book" , bookRoutes)
+app.use("/api/card" , cardRoutes)
+app.use("/api/dept" , departmentRoutes)
+app.use("/api/issue", issueRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/mybooks", myissuebook);
 
 // Start Server
 
-app.listen(5000, () => {
-  console.log(`Server started on port 5000`);
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

@@ -20,9 +20,26 @@ const userSchema = new mongoose.Schema({
     },
     role:{
         type:String,
-        enum:["admin","teacher","students"],
-        default:"students"
-    }
+        enum:["admin","teacher","student"],
+        default:"admin"
+    },
+    department: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Department"
+},
+ card: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Card"
+},
+book: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Book"
+},
+    status: {
+  type: String,
+  enum: ["active", "inactive"],
+  default: "active"
+}   
 },
 {timestamps:true}
 );

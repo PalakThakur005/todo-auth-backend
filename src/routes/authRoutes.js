@@ -1,9 +1,79 @@
 import express from "express"
-// const { registerUser, loginUser } = authController;
-import {registerUser,loginUser} from "../controllers/authController.js"
+import {registerUser,loginUser, getUser,getDashboardStats , 
+     deleteUser, updateUser , toggleStatus, resetUserPassword, 
+     contactAdmin, pagination , getMe} from "../controllers/authController.js"
+import {protect} from "../middlewares/authMiddleware.js"    
+import { authorizeRoles } from "../middlewares/roleMiddleware.js"; 
+
 const router = express.Router()
 
-router.post("/register" ,registerUser);
-router.post("/login" , loginUser)
+router.post(
+  "/register",
+  protect,
+  authorizeRoles("admin"),
+  registerUser
+);
+
+router.post("/login" , loginUser);
+
+
+router.get(
+  "/getRoles",
+  protect,
+  authorizeRoles("admin"),
+  getUser
+);
+
+
+router.get(
+  "/pagination",
+  protect,
+  authorizeRoles("admin"),
+  pagination
+);
+
+
+router.get(
+  "/dashboard-stats",
+  protect,
+  authorizeRoles("admin"),
+  getDashboardStats
+);
+
+router.delete(
+  "/deleteUser/:id",
+  protect,
+  authorizeRoles("admin"),
+  deleteUser
+);
+
+router.put(
+  "/updateUser/:id",
+  protect,
+  authorizeRoles("admin"),
+  updateUser 
+);
+
+
+router.put(
+  "/toggle-status/:id",
+  protect,
+  authorizeRoles("admin"),
+  toggleStatus
+);
+
+
+
+router.put(
+  "/reset-password/:id",
+  protect,
+  authorizeRoles("admin"),
+  resetUserPassword
+);
+
+
+router.post("/contact-admin" , contactAdmin);
+
+router.get("/me", protect, getMe);
 
 export default router;
